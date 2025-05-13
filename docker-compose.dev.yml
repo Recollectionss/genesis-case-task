@@ -1,8 +1,9 @@
 name: genesis-case-task-dev
+
 services:
   genesis-node-dev:
     image: node:20
-    container_name: genesis-node-dev
+    container_name: genesis-node
     env_file: .env
     working_dir: /app
     volumes:
@@ -14,7 +15,7 @@ services:
       - app-network
 
   genesis-postgres-dev:
-    container_name: genesis-postgres-dev
+    container_name: genesis-postgres
     image: postgres:16.3
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
