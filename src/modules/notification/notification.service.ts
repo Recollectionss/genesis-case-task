@@ -23,16 +23,20 @@ export class NotificationService {
 
   async sendMail(data: ISendMail) {
     try {
-      const mailData = {
-        from: this.smtpConf.user,
-        to: data.to,
-        subject: MAIL_DETAILS[data.type].subject + data.city,
-        text: MAIL_DETAILS[data.type].text + data.token,
-      };
+      const mailData = this.buildMail(data);
       await this.transporter.sendMail(mailData);
     } catch (err) {
       this.logger.error('Error', err);
       throw new InternalServerErrorException(err.message);
     }
+  }
+
+  private buildMail(data: ISendMail) {
+    return {
+      from: this.smtpConf.user,
+      to: data.to,
+      subject: MAIL_DETAILS[data.type].subject + data.city,
+      text: MAIL_DETAILS[data.type].text + data.token,
+    };
   }
 }
