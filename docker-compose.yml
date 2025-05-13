@@ -2,19 +2,19 @@ name: genesis-case-task-prod
 
 services:
   genesis-node-prod:
-    container_name: genesis-node-prod
+    container_name: genesis-node
     env_file: .env
     build:
       dockerfile: Dockerfile
       context: .
     ports:
       - '${APP_PORT}:${APP_PORT}'
-    command: sh -c "npm install  && npm run build && npm run start:dev"
+    command: sh -c "npm run migration:up && npm run start:prod"
     networks:
       - app-network
 
   genesis-postgres-prod:
-    container_name: genesis-postgres-prod
+    container_name: genesis-postgres
     image: postgres:16.3
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
