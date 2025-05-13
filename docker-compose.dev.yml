@@ -1,4 +1,5 @@
 name: genesis-case-task-dev
+
 services:
   genesis-node-dev:
     image: node:20
