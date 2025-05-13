@@ -25,6 +25,7 @@ export class NotificationService {
     try {
       const mailData = this.buildMail(data);
       await this.transporter.sendMail(mailData);
+      return;
     } catch (err) {
       this.logger.error('Error', err);
       throw new InternalServerErrorException(err.message);
