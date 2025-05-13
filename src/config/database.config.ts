@@ -1,0 +1,15 @@
+import { registerAs } from '@nestjs/config';
+import * as process from 'node:process';
+
+export default registerAs('postgres', () => ({
+  port: Number(process.env.POSTGRES_PORT),
+  host: String(process.env.POSTGRES_HOST),
+  development: {
+    user: String(process.env.POSTGRES_APP_USER),
+    pass: String(process.env.POSTGRES_APP_PASSWORD),
+  },
+  production: {
+    user: String(process.env.POSTGRES_TEST_USER),
+    pass: String(process.env.POSTGRES_TEST_PASSWORD),
+  },
+}));
