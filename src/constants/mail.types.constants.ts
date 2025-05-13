@@ -1,4 +1,4 @@
-enum TYPE_MAIL {
+export enum TYPE_MAIL {
   SUBSCRIBE = 'subscribe',
   UNSUBSCRIBE = 'unsubscribe',
 }
