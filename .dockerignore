@@ -1,0 +1,10 @@
+node_modules
+README.md
+example.env
+docker-compose.dev.yml
+docker-compose.yml
+dist
+.eslintrc.js
+.gitignore
+test
+**/*.spec.ts
