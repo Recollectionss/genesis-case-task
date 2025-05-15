@@ -56,7 +56,7 @@ export class WeatherApiService {
         throw new NotFoundException('City not found');
       }
       if (error.code === 1003) {
-        throw new InternalServerErrorException(error.message.split(': ')[1]);
+        throw new InternalServerErrorException(error.message);
       }
     }
     if (
