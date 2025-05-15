@@ -8,6 +8,7 @@ import {
 import { GetCurrentWeatherDto } from './dto/get-current-weather.dto';
 import { UrlBuilderService } from './url-builder/url-builder.service';
 import { ApiResponseDto } from './dto/api-response.dto';
+import { CurrentWeatherDto } from './dto/current-weather.dto';
 
 @Injectable()
 export class WeatherApiService {
@@ -15,10 +16,17 @@ export class WeatherApiService {
 
   constructor(private readonly urlBuilder: UrlBuilderService) {}
 
-  async getCurrentWeather(data: GetCurrentWeatherDto) {
+  async getCurrentWeather(
+    data: GetCurrentWeatherDto,
+  ): Promise<CurrentWeatherDto> {
     try {
       const url = this.getCurrentWeatherJsonUrl(data);
-      return await this.fetch(url);
+      const resultData = await this.fetch(url);
+      return {
+        temperature: resultData.current.temp_c,
+        humidity: resultData.current.humidity,
+        description: resultData.current.condition.text,
+      };
     } catch (error) {
       this.handleResponseError(error);
     }
