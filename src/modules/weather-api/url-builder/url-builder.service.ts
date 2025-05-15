@@ -55,9 +55,9 @@ export class UrlBuilderService {
 
   withParams(data: GetCurrentWeatherDto): UrlBuilderService {
     const params = new URLSearchParams({
-      key: this.weatherApiConf.key,
       lang: WEATHER_API_PARAMS.lang,
       q: data.city,
+      key: this.weatherApiConf.key,
     });
     this.url += '?' + params.toString();
     return this;
