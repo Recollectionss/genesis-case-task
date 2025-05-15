@@ -7,5 +7,6 @@ import { WeatherApiService } from './weather-api.service';
 @Module({
   imports: [ConfigModule.forRoot({ load: [weatherApiConfig] })],
   providers: [WeatherApiService, UrlBuilderService],
+  exports: [WeatherApiService],
 })
 export class WeatherApiModule {}
