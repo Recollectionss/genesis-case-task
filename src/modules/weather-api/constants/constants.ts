@@ -19,3 +19,9 @@ export const REQUIRED_API_PARAMS = {
 };
 
 export type RequiredApiParamKey = keyof typeof REQUIRED_API_PARAMS;
+
+export const REQUIRED_FORMAT_URL = [
+  '/v1',
+  WEATHER_API_PATHS,
+  WEATHER_API_TYPE_RESPONSE,
+];

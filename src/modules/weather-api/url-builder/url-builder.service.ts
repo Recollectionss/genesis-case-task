@@ -3,6 +3,7 @@ import weatherApiConfig from '../../../config/weather-api.config';
 import { ConfigType } from '@nestjs/config';
 import {
   REQUIRED_API_PARAMS,
+  REQUIRED_FORMAT_URL,
   RequiredApiParamKey,
   WEATHER_API_BASE_URL,
   WEATHER_API_PARAMS,
@@ -71,6 +72,12 @@ export class UrlBuilderService {
 
   private validateUrl(url: string): void {
     const parsed = new URL(url);
+    const path = parsed.pathname.split('/').filter(Boolean);
+    const format = path.pop().split('.');
+    path.push(format[0], '.' + format[1]);
+    if (path.length < REQUIRED_FORMAT_URL.length) {
+      throw new Error('Invalid url lenght');
+    }
     const requiredKeys: RequiredApiParamKey[] = Object.keys(
       REQUIRED_API_PARAMS,
     ) as RequiredApiParamKey[];
