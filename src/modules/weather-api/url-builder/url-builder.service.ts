@@ -8,6 +8,23 @@ import {
   WEATHER_API_TYPE_RESPONSE,
 } from '../constants/constants';
 import { GetCurrentWeatherDto } from '../dto/get-current-weather.dto';
+/*
+  UrlBuilderService - class implement pattern builder for generate url to https://api.weatherapi.com/v1
+  How use for current city weather url:
+
+  data = {
+    city= Kyiv
+  }
+
+  this
+  .base()
+  .current()
+  .json()
+  .withParams(data) (base lang English see WEATHER_API_PARAMS)
+  .build()
+
+  result: https://api.weatherapi.com/v1/current.json?key=YOUR_API_KEY&q=Kyiv&lang=en
+*/
 
 @Injectable()
 export class UrlBuilderService {
