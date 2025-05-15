@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import weatherApiConfig from '../../../config/weather-api.config';
 import { ConfigType } from '@nestjs/config';
 import {
+  REQUIRED_API_PARAMS,
+  RequiredApiParamKey,
   WEATHER_API_BASE_URL,
   WEATHER_API_PARAMS,
   WEATHER_API_PATHS,
@@ -63,6 +65,20 @@ export class UrlBuilderService {
   build(): string {
     const finalUrl = this.url;
     this.url = '';
+    this.validateUrl(finalUrl);
     return finalUrl;
+  }
+
+  private validateUrl(url: string): void {
+    const parsed = new URL(url);
+    const requiredKeys: RequiredApiParamKey[] = Object.keys(
+      REQUIRED_API_PARAMS,
+    ) as RequiredApiParamKey[];
+
+    for (const key of requiredKeys) {
+      if (!parsed.searchParams.has(key)) {
+        throw new Error(`Missing required query param: ${key}`);
+      }
+    }
   }
 }

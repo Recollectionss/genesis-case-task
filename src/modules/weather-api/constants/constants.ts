@@ -11,3 +11,11 @@ export const WEATHER_API_TYPE_RESPONSE = {
 export const WEATHER_API_PARAMS = {
   lang: 'en',
 };
+
+export const REQUIRED_API_PARAMS = {
+  lang: '',
+  q: '',
+  key: '',
+};
+
+export type RequiredApiParamKey = keyof typeof REQUIRED_API_PARAMS;
