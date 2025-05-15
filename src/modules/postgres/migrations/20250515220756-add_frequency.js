@@ -5,7 +5,7 @@ const schema = process.env.NODE_ENV === 'production' ? 'public' : 'test';
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
-      { tableName: 'city', schema },
+      { tableName: 'frequency', schema },
       {
         id: {
           type: Sequelize.UUID,
@@ -13,8 +13,8 @@ module.exports = {
           allowNull: false,
           primaryKey: true,
         },
-        name: {
-          type: Sequelize.STRING,
+        when: {
+          type: Sequelize.ENUM('hourly', 'daily'),
           allowNull: false,
           unique: false,
         },
@@ -24,7 +24,12 @@ module.exports = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeIndex({ tableName: 'city', schema }, ['id']);
-    await queryInterface.dropTable({ tableName: 'city', schema });
+    await queryInterface.removeIndex({ tableName: 'frequency', schema }, [
+      'id',
+    ]);
+    await queryInterface.dropTable({ tableName: 'frequency', schema });
+    await queryInterface.sequelize.query(
+      `DROP TYPE IF EXISTS ${schema}.enum_frequency_when CASCADE;`,
+    );
   },
 };
