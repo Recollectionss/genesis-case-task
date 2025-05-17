@@ -8,10 +8,10 @@ export class UserService {
   constructor(
     @Inject(USER_REPOSITORY) private readonly userRepository: typeof User,
   ) {}
-  async findOrCreate(data: CreateUserDto) {
+  async findOrCreate(data: CreateUserDto): Promise<string> {
     const dataValues = await this.userRepository.findOrCreate({
       where: { email: data.email },
     });
-    return dataValues[0];
+    return dataValues[0].id;
   }
 }

@@ -9,10 +9,10 @@ export class CityService {
     @Inject(CITY_REPOSITORY) private readonly cityRepository: typeof City,
   ) {}
 
-  async findOrCreate(data: CityDto) {
+  async findOrCreate(data: CityDto): Promise<string> {
     const dataValues = await this.cityRepository.findOrCreate({
       where: { name: data.name },
     });
-    return dataValues[0];
+    return dataValues[0].id;
   }
 }

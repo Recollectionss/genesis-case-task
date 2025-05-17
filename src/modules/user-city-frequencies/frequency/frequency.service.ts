@@ -10,12 +10,12 @@ export class FrequencyService {
     private readonly frequencyRepository: typeof Frequency,
   ) {}
 
-  async findOrCreate(data: FrequencyDto) {
+  async findOrCreate(data: FrequencyDto): Promise<string> {
     const dataValues = await this.frequencyRepository.findOrCreate({
       where: {
         when: data.when,
       },
     });
-    return dataValues[0];
+    return dataValues[0].id;
   }
 }
