@@ -6,6 +6,7 @@ import appConfig from '../config/app.config';
 import { WeatherApiModule } from './weather-api/weather-api.module';
 import { WeatherModule } from './weather/weather.module';
 import { UserCityFrequenciesModule } from './user-city-frequencies/user-city-frequencies.module';
+import { SubscriptionModule } from './subscription/subscription.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserCityFrequenciesModule } from './user-city-frequencies/user-city-fre
     WeatherApiModule,
     WeatherModule,
     UserCityFrequenciesModule,
+    SubscriptionModule,
   ],
   controllers: [],
   providers: [],
