@@ -58,22 +58,6 @@ module.exports = {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   down: async function (queryInterface, Sequelize) {
-    await queryInterface.removeConstraint(
-      { tableName: 'user-city-frequencies', schema },
-      'user-city-frequencies_city_id_fkey',
-    );
-    await queryInterface.removeConstraint(
-      { tableName: 'user-city-frequencies', schema },
-      'user-city-frequencies_frequency_id_fkey',
-    );
-    await queryInterface.removeConstraint(
-      { tableName: 'user-city-frequencies', schema },
-      'user-city-frequencies_user_id_fkey',
-    );
-    await queryInterface.removeIndex(
-      { tableName: 'user-city-frequencies', schema },
-      ['id'],
-    );
     await queryInterface.dropTable({
       schema,
       tableName: 'user-city-frequencies',
