@@ -37,6 +37,11 @@ module.exports = {
             key: 'id',
           },
         },
+        isDeleted: {
+          type: Sequelize.BOOLEAN,
+          defaultValue: false,
+          allowNull: false,
+        },
         createdAt: {
           type: Sequelize.DATE,
           allowNull: false,

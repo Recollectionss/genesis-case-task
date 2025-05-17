@@ -6,9 +6,9 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { City } from '../../city/entity/city.entity';
-import { Frequency } from '../../frequency/entity/frequency.entity';
-import { User } from '../../user/entity/user.entity';
+import { City } from '../city/entity/city.entity';
+import { Frequency } from '../frequency/entity/frequency.entity';
+import { User } from '../user/entity/user.entity';
 
 @Table({ tableName: 'user-city-frequencies' })
 export class UserCityFrequencies extends Model {
@@ -21,22 +21,38 @@ export class UserCityFrequencies extends Model {
   })
   id: string;
 
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  })
+  isDeleted: boolean;
+
   @ForeignKey(() => City)
-  @Column({})
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
   cityId: string;
 
   @BelongsTo(() => City)
   city: City;
 
   @ForeignKey(() => Frequency)
-  @Column({})
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
   frequencyId: string;
 
   @BelongsTo(() => Frequency)
   frequency: Frequency;
 
   @ForeignKey(() => User)
-  @Column({})
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
   userId: string;
 
   @BelongsTo(() => User)
