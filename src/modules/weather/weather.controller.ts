@@ -7,7 +7,7 @@ export class WeatherController {
   constructor(private readonly weatherApiService: WeatherApiService) {}
 
   @Get()
-  async getCurrentWeatherInCity(@Query('city') city: GetCurrentWeatherDto) {
+  async getCurrentWeatherInCity(@Query() city: GetCurrentWeatherDto) {
     return this.weatherApiService.getCurrentWeather(city);
   }
 }
