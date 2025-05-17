@@ -17,28 +17,29 @@ export class UserCityFrequenciesService {
     private readonly frequencyService: FrequencyService,
   ) {}
 
-  async create(data: UserCityFrequenciesDto) {
-    const relationsId: RelationsIdType = await this.findRelations(data);
-    const result = await this.userCityFrequencyRepository.findOrCreate({
-      where: relationsId,
-      defaults: relationsId,
-    });
-    const dataValues = result[0];
-    if (dataValues.isDeleted) {
-      await dataValues.update({ isDeleted: false });
+  async create(data: UserCityFrequenciesDto): Promise<void> {
+    const relationsId: RelationsIdType = await this.findRelationsId(data);
+    const [result]: [UserCityFrequencies, boolean] =
+      await this.userCityFrequencyRepository.findOrCreate({
+        where: relationsId,
+        defaults: relationsId,
+      });
+    if (result.isDeleted) {
+      await result.update({ isDeleted: false });
     }
     return;
   }
 
-  async delete(data: UserCityFrequenciesDto) {
-    const relationsId: RelationsIdType = await this.findRelations(data);
+  async delete(data: UserCityFrequenciesDto): Promise<void> {
+    const relationsId: RelationsIdType = await this.findRelationsId(data);
     await this.userCityFrequencyRepository.update(
       { isDeleted: true },
       { where: relationsId },
     );
+    return;
   }
 
-  private async findRelations(
+  private async findRelationsId(
     data: UserCityFrequenciesDto,
   ): Promise<RelationsIdType> {
     const userId = await this.userService.findOrCreate({ email: data.email });
@@ -46,6 +47,6 @@ export class UserCityFrequenciesService {
     const frequencyId = await this.frequencyService.findOrCreate({
       when: data.when,
     });
-    return { userId, cityId, frequencyId } as RelationsIdType;
+    return { userId, cityId, frequencyId };
   }
 }
