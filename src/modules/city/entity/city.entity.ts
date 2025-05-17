@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
+import { UserCityFrequencies } from '../../user-city-frequencies/entity/user-city-frequencies.entity';
 
 @Table({ tableName: 'city' })
 export class City extends Model {
@@ -17,4 +18,10 @@ export class City extends Model {
     unique: true,
   })
   name: string;
+
+  @HasMany(() => UserCityFrequencies, {
+    foreignKey: 'cityId',
+    sourceKey: 'id',
+  })
+  data: UserCityFrequencies[];
 }

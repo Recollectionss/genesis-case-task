@@ -13,7 +13,7 @@ module.exports = {
           unique: true,
           primaryKey: true,
         },
-        user_id: {
+        userId: {
           type: Sequelize.UUID,
           allowNull: false,
           references: {
@@ -21,7 +21,7 @@ module.exports = {
             key: 'id',
           },
         },
-        city_id: {
+        cityId: {
           type: Sequelize.UUID,
           allowNull: false,
           references: {
@@ -29,7 +29,7 @@ module.exports = {
             key: 'id',
           },
         },
-        frequency_id: {
+        frequencyId: {
           type: Sequelize.UUID,
           allowNull: false,
           references: {
