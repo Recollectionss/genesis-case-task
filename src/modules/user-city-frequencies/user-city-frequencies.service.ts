@@ -12,6 +12,7 @@ import { FrequencyService } from './frequency/frequency.service';
 import { RelationsIdType } from './types/relations-id.type';
 import { SubscribeDto } from '../dto/subscribe.dto';
 import Transaction from 'sequelize/types/transaction';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UserCityFrequenciesService {
@@ -32,10 +33,12 @@ export class UserCityFrequenciesService {
         transaction,
       });
     if (!created) {
+      if (result.isDeleted && !result.isConfirmed) {
+        const confirmationToken = uuidv4();
+        await result.update({ isDeleted: false, confirmationToken });
+        return confirmationToken;
+      }
       throw new ConflictException('Email already subscribed');
-    }
-    if (result.isDeleted) {
-      await result.update({ isDeleted: false });
     }
     return result.confirmationToken;
   }
@@ -51,11 +54,10 @@ export class UserCityFrequenciesService {
     return;
   }
 
-  async delete(data: SubscribeDto): Promise<void> {
-    const relationsId: RelationsIdType = await this.findRelationsId(data);
+  async confirmUnsubscribe(token: string): Promise<void> {
     await this.userCityFrequencyRepository.update(
-      { isDeleted: true },
-      { where: relationsId },
+      { isDeleted: true, isConfirmed: false },
+      { where: { confirmationToken: token } },
     );
     return;
   }
