@@ -6,6 +6,7 @@ import { UserService } from './user/user.service';
 import { FrequencyService } from './frequency/frequency.service';
 import { RelationsIdType } from './types/relations-id.type';
 import { SubscribeDto } from '../dto/subscribe.dto';
+import Transaction from 'sequelize/types/transaction';
 
 @Injectable()
 export class UserCityFrequenciesService {
@@ -17,12 +18,13 @@ export class UserCityFrequenciesService {
     private readonly frequencyService: FrequencyService,
   ) {}
 
-  async create(data: SubscribeDto): Promise<string> {
+  async create(data: SubscribeDto, transaction: Transaction): Promise<string> {
     const relationsId: RelationsIdType = await this.findRelationsId(data);
     const [result, created]: [UserCityFrequencies, boolean] =
       await this.userCityFrequencyRepository.findOrCreate({
         where: relationsId,
         defaults: relationsId,
+        transaction,
       });
     if (!created) {
       throw new ConflictException('Email already subscribed');
