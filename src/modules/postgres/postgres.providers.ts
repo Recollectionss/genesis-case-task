@@ -1,9 +1,13 @@
 import postgresConfig from '../../config/postgres.config';
 import appConfig from '../../config/app.config';
 import { ConfigType } from '@nestjs/config';
-import { Sequelize } from 'sequelize';
 import { POSTGRES, SEQUELIZE } from './constants';
 import { ENV, NODE_ENV } from '../../constants/env.constant';
+import { Sequelize } from 'sequelize-typescript';
+import { City } from '../user-city-frequencies/city/entity/city.entity';
+import { User } from '../user-city-frequencies/user/entity/user.entity';
+import { Frequency } from '../user-city-frequencies/frequency/entity/frequency.entity';
+import { UserCityFrequencies } from '../user-city-frequencies/entity/user-city-frequencies.entity';
 
 export const postgresProviders = [
   {
@@ -27,6 +31,8 @@ export const postgresProviders = [
         username: creeds.user,
         password: creeds.pass,
       });
+
+      sequelize.addModels([City, User, Frequency, UserCityFrequencies]);
 
       if (appConf.node_dev === NODE_ENV.Testing) {
         await sequelize.sync({ force: true });

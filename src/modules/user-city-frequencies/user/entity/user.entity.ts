@@ -1,5 +1,5 @@
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
-import { UserCityFrequencies } from '../../user-city-frequencies/entity/user-city-frequencies.entity';
+import { UserCityFrequencies } from '../../entity/user-city-frequencies.entity';
 
 @Table({ tableName: 'users' })
 export class User extends Model {
