@@ -1,11 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { UserCityFrequencies } from './entity/user-city-frequencies.entity';
 import { USER_CITY_FREQUENCIES_REPOSITORY } from './user-city-frequencies.provider';
 import { CityService } from './city/city.service';
 import { UserService } from './user/user.service';
 import { FrequencyService } from './frequency/frequency.service';
-import { UserCityFrequenciesDto } from './dto/user-city-frequencies.dto';
 import { RelationsIdType } from './types/relations-id.type';
+import { SubscribeDto } from '../dto/subscribe.dto';
 
 @Injectable()
 export class UserCityFrequenciesService {
@@ -17,20 +17,31 @@ export class UserCityFrequenciesService {
     private readonly frequencyService: FrequencyService,
   ) {}
 
-  async create(data: UserCityFrequenciesDto): Promise<void> {
+  async create(data: SubscribeDto): Promise<string> {
     const relationsId: RelationsIdType = await this.findRelationsId(data);
-    const [result]: [UserCityFrequencies, boolean] =
+    const [result, created]: [UserCityFrequencies, boolean] =
       await this.userCityFrequencyRepository.findOrCreate({
         where: relationsId,
         defaults: relationsId,
       });
+    if (!created) {
+      throw new ConflictException('Email already subscribed');
+    }
     if (result.isDeleted) {
       await result.update({ isDeleted: false });
     }
+    return result.confirmationToken;
+  }
+
+  async confirmSubscribe(token: string) {
+    await this.userCityFrequencyRepository.update(
+      { isConfirmed: true },
+      { where: { confirmationToken: token } },
+    );
     return;
   }
 
-  async delete(data: UserCityFrequenciesDto): Promise<void> {
+  async delete(data: SubscribeDto): Promise<void> {
     const relationsId: RelationsIdType = await this.findRelationsId(data);
     await this.userCityFrequencyRepository.update(
       { isDeleted: true },
@@ -39,9 +50,7 @@ export class UserCityFrequenciesService {
     return;
   }
 
-  private async findRelationsId(
-    data: UserCityFrequenciesDto,
-  ): Promise<RelationsIdType> {
+  private async findRelationsId(data: SubscribeDto): Promise<RelationsIdType> {
     const userId = await this.userService.findOrCreate({ email: data.email });
     const cityId = await this.cityService.findOrCreate({ name: data.city });
     const frequencyId = await this.frequencyService.findOrCreate({
