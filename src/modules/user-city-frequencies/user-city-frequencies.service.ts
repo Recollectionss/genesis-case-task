@@ -5,6 +5,7 @@ import { CityService } from './city/city.service';
 import { UserService } from './user/user.service';
 import { FrequencyService } from './frequency/frequency.service';
 import { UserCityFrequenciesDto } from './dto/user-city-frequencies.dto';
+import { RelationsIdType } from './types/relations-id.type';
 
 @Injectable()
 export class UserCityFrequenciesService {
@@ -17,18 +18,10 @@ export class UserCityFrequenciesService {
   ) {}
 
   async create(data: UserCityFrequenciesDto) {
-    const [user, city, frequency] = await this.findRelations(data);
+    const relationsId: RelationsIdType = await this.findRelations(data);
     const result = await this.userCityFrequencyRepository.findOrCreate({
-      where: {
-        userId: user.id,
-        cityId: city.id,
-        frequencyId: frequency.id,
-      },
-      defaults: {
-        userId: user.id,
-        cityId: city.id,
-        frequencyId: frequency.id,
-      },
+      where: relationsId,
+      defaults: relationsId,
     });
     const dataValues = result[0];
     if (dataValues.isDeleted) {
@@ -38,25 +31,21 @@ export class UserCityFrequenciesService {
   }
 
   async delete(data: UserCityFrequenciesDto) {
-    const [user, city, frequency] = await this.findRelations(data);
+    const relationsId: RelationsIdType = await this.findRelations(data);
     await this.userCityFrequencyRepository.update(
       { isDeleted: true },
-      {
-        where: {
-          userId: user.id,
-          cityId: city.id,
-          frequencyId: frequency.id,
-        },
-      },
+      { where: relationsId },
     );
   }
 
-  private async findRelations(data: UserCityFrequenciesDto) {
-    const user = await this.userService.findOrCreate({ email: data.email });
-    const city = await this.cityService.findOrCreate({ name: data.city });
-    const frequency = await this.frequencyService.findOrCreate({
+  private async findRelations(
+    data: UserCityFrequenciesDto,
+  ): Promise<RelationsIdType> {
+    const userId = await this.userService.findOrCreate({ email: data.email });
+    const cityId = await this.cityService.findOrCreate({ name: data.city });
+    const frequencyId = await this.frequencyService.findOrCreate({
       when: data.when,
     });
-    return [user, city, frequency];
+    return { userId, cityId, frequencyId } as RelationsIdType;
   }
 }
