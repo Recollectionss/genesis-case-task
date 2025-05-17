@@ -6,7 +6,7 @@ import { SubscribeDto } from '../dto/subscribe.dto';
 import { TYPE_MAIL } from '../../constants/mail.types.constants';
 import { SEQUELIZE } from '../postgres/constants';
 import { Sequelize } from 'sequelize-typescript';
-import { ConfirmSubscribeDto } from './dto/confirm-subscribe.dto';
+import { TokenSubscribeDto } from './dto/token-subscribe.dto';
 
 @Injectable()
 export class SubscriptionService {
@@ -41,9 +41,13 @@ export class SubscriptionService {
     }
   }
 
-  async confirm(data: ConfirmSubscribeDto): Promise<void> {
+  async confirm(data: TokenSubscribeDto): Promise<void> {
     await this.userCityFrequenciesService.confirmSubscribe(data.token);
+    return;
   }
 
-  async unsubscribe(): Promise<void> {}
+  async unsubscribe(data: TokenSubscribeDto): Promise<void> {
+    await this.userCityFrequenciesService.confirmUnsubscribe(data.token);
+    return;
+  }
 }

@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
-export class ConfirmSubscribeDto {
+export class TokenSubscribeDto {
   @IsNotEmpty()
   @IsString()
   @IsUUID('4')
