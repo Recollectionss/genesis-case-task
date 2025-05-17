@@ -1,9 +1,9 @@
 import {
+  BadRequestException,
   HttpStatus,
   Injectable,
   InternalServerErrorException,
   Logger,
-  NotFoundException,
 } from '@nestjs/common';
 import { GetCurrentWeatherDto } from './dto/get-current-weather.dto';
 import { UrlBuilderService } from './url-builder/url-builder.service';
@@ -53,7 +53,7 @@ export class WeatherApiService {
     this.logger.error('Error get current weather data', error);
     if (error.status === HttpStatus.BAD_REQUEST) {
       if (error.code === 1006) {
-        throw new NotFoundException('City not found');
+        throw new BadRequestException('City not found');
       }
       if (error.code === 1003) {
         throw new InternalServerErrorException(error.message);
