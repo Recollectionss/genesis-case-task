@@ -1,4 +1,9 @@
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserCityFrequencies } from './entity/user-city-frequencies.entity';
 import { USER_CITY_FREQUENCIES_REPOSITORY } from './user-city-frequencies.provider';
 import { CityService } from './city/city.service';
@@ -36,10 +41,13 @@ export class UserCityFrequenciesService {
   }
 
   async confirmSubscribe(token: string) {
-    await this.userCityFrequencyRepository.update(
+    const [result]: [number] = await this.userCityFrequencyRepository.update(
       { isConfirmed: true },
       { where: { confirmationToken: token } },
     );
+    if (result < 1) {
+      throw new NotFoundException('Subscribe already confirmed');
+    }
     return;
   }
 

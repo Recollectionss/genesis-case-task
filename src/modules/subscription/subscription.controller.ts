@@ -1,7 +1,15 @@
-import { Body, Controller, Get, Post, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import { SubscriptionService } from './subscription.service';
 import { SubscribeDto } from '../dto/subscribe.dto';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { ConfirmSubscribeDto } from './dto/confirm-subscribe.dto';
 
 @Controller()
 export class SubscriptionController {
@@ -15,8 +23,8 @@ export class SubscriptionController {
   }
 
   @Get('confirm/:token')
-  async confirm(): Promise<void> {
-    return this.subscriptionService.confirm();
+  async confirm(@Param() data: ConfirmSubscribeDto): Promise<void> {
+    return this.subscriptionService.confirm(data);
   }
 
   @Get('unsubscribe/:token')
