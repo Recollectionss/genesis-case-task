@@ -1,13 +1,17 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseInterceptors } from '@nestjs/common';
 import { SubscriptionService } from './subscription.service';
+import { SubscribeDto } from '../dto/subscribe.dto';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
 @Controller()
 export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService) {}
 
+  // Need use AnyFilesInterceptor for accept only multipart/form-data
+  @UseInterceptors(AnyFilesInterceptor())
   @Post('subscribe')
-  async subscribe(): Promise<void> {
-    return this.subscriptionService.subscribe();
+  async subscribe(@Body() data: SubscribeDto): Promise<void> {
+    return this.subscriptionService.subscribe(data);
   }
 
   @Get('confirm/:token')
