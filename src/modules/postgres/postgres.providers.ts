@@ -30,6 +30,7 @@ export const postgresProviders = [
         database: postgresConf.db,
         username: creeds.user,
         password: creeds.pass,
+        define: { schema: creeds.schema },
       });
 
       sequelize.addModels([City, User, Frequency, UserCityFrequencies]);

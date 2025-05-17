@@ -8,13 +8,16 @@ export default registerAs('postgres', () => ({
   testing: {
     user: String(process.env.POSTGRES_TEST_USER),
     pass: String(process.env.POSTGRES_TEST_PASSWORD),
+    schema: 'test',
   },
   development: {
     user: String(process.env.POSTGRES_TEST_USER),
     pass: String(process.env.POSTGRES_TEST_PASSWORD),
+    schema: 'test',
   },
   production: {
     user: String(process.env.POSTGRES_APP_USER),
     pass: String(process.env.POSTGRES_APP_PASSWORD),
+    schema: 'public',
   },
 }));
