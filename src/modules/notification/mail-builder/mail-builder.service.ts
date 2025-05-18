@@ -28,13 +28,20 @@ export class MailBuilderService {
 
   mailCurrentWeather(weatherData: CityWeatherDto[]): MailBuilderService {
     this.mailText.subject = MAIL_DETAILS.weather_notification.subject;
+
     this.mailText.text = weatherData
-      .map((data) =>
-        Object.entries(data)
-          .map(([key, value]) => `${key}: ${value}`)
-          .join('\n'),
-      )
+      .map((data) => {
+        const weatherInfo = `City: ${data.city}
+Temperature: ${data.temperature}
+Humidity: ${data.humidity}
+Description: ${data.description}`;
+
+        const unsubscribeLink = `Unsubscribe: http://localhost:5010/unsubscribe/${data.token}`;
+
+        return `${weatherInfo}\n${unsubscribeLink}`;
+      })
       .join('\n\n');
+
     return this;
   }
 
