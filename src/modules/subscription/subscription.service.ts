@@ -27,7 +27,7 @@ export class SubscriptionService {
         data,
         transaction,
       );
-      await this.notificationService.sendMail({
+      await this.notificationService.sendSubscribeMail({
         to: data.email,
         city: data.city,
         type: TYPE_MAIL.SUBSCRIBE,
