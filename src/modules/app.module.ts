@@ -7,6 +7,7 @@ import { WeatherApiModule } from './weather-api/weather-api.module';
 import { WeatherModule } from './weather/weather.module';
 import { UserCityFrequenciesModule } from './user-city-frequencies/user-city-frequencies.module';
 import { SubscriptionModule } from './subscription/subscription.module';
+import { WeatherNotifierModule } from './weather-notifier/weather-notifier.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { SubscriptionModule } from './subscription/subscription.module';
     WeatherModule,
     UserCityFrequenciesModule,
     SubscriptionModule,
+    WeatherNotifierModule,
   ],
   controllers: [],
   providers: [],
