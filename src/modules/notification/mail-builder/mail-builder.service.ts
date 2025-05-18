@@ -3,7 +3,7 @@ import smtpConfig from '../../../config/smtp.config';
 import { ConfigType } from '@nestjs/config';
 import { Mail } from '../types/mail.type';
 import { MAIL_DETAILS } from '../constants/mail.details.constants';
-import { CurrentWeatherDto } from '../../weather-api/dto/current-weather.dto';
+import { CityWeatherDto } from '../../weather-api/dto/city-weather.dto';
 
 @Injectable()
 export class MailBuilderService {
@@ -26,7 +26,7 @@ export class MailBuilderService {
     return this;
   }
 
-  mailCurrentWeather(weatherData: CurrentWeatherDto[]): MailBuilderService {
+  mailCurrentWeather(weatherData: CityWeatherDto[]): MailBuilderService {
     this.mailText.subject = MAIL_DETAILS.weather_notification.subject;
     this.mailText.text = weatherData
       .map((data) =>
