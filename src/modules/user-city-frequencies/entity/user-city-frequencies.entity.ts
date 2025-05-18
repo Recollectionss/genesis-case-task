@@ -14,7 +14,7 @@ import { User } from '../user/entity/user.entity';
 export class UserCityFrequencies extends Model {
   @Column({
     type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
+    defaultValue: DataType.UUIDV4(),
     allowNull: false,
     unique: true,
     primaryKey: true,
@@ -27,6 +27,20 @@ export class UserCityFrequencies extends Model {
     allowNull: false,
   })
   isDeleted: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  })
+  isConfirmed: boolean;
+
+  @Column({
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4(),
+    allowNull: false,
+  })
+  confirmationToken: string;
 
   @ForeignKey(() => City)
   @Column({
