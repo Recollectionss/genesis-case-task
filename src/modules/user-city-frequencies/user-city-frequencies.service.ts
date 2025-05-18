@@ -13,6 +13,10 @@ import { RelationsIdType } from './types/relations-id.type';
 import { SubscribeDto } from '../dto/subscribe.dto';
 import Transaction from 'sequelize/types/transaction';
 import { v4 as uuidv4 } from 'uuid';
+import { Frequency } from './frequency/entity/frequency.entity';
+import { FrequencyStatus } from '../constants/constants';
+import { User } from './user/entity/user.entity';
+import { City } from './city/entity/city.entity';
 
 @Injectable()
 export class UserCityFrequenciesService {
@@ -60,6 +64,34 @@ export class UserCityFrequenciesService {
       { where: { confirmationToken: token } },
     );
     return;
+  }
+
+  async getNotificationData(when: FrequencyStatus) {
+    return await this.userCityFrequencyRepository.findAll({
+      where: {
+        isConfirmed: true,
+        isDeleted: false,
+      },
+      include: [
+        {
+          model: Frequency,
+          where: {
+            when,
+          },
+          required: true,
+        },
+        {
+          model: User,
+          required: true,
+          attributes: ['email'],
+        },
+        {
+          model: City,
+          required: true,
+          attributes: ['name'],
+        },
+      ],
+    });
   }
 
   private async findRelationsId(data: SubscribeDto): Promise<RelationsIdType> {
