@@ -1,22 +1,33 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { NotificationService } from '../notification/notification.service';
 import { WeatherApiService } from '../weather-api/weather-api.service';
 import { UserCityFrequenciesService } from '../user-city-frequencies/user-city-frequencies.service';
 import { CityWeatherDto } from '../weather-api/dto/city-weather.dto';
 import { FrequencyStatus } from '../constants/constants';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class WeatherNotifierService {
+  private logger = new Logger(WeatherNotifierService.name);
   constructor(
     private readonly notificationService: NotificationService,
     private readonly weatherApiService: WeatherApiService,
     private readonly userCityFrequenciesService: UserCityFrequenciesService,
   ) {}
 
-  async setupHourlyNotification() {
-    const data = await this.userCityFrequenciesService.getNotificationData(
-      FrequencyStatus.HOURLY,
-    );
+  @Cron('0 8-20 * * *')
+  private async hourlyNotifications() {
+    await this.setupNotifications(FrequencyStatus.HOURLY);
+  }
+
+  @Cron('0 8 * * *')
+  private async dailyNotifications() {
+    await this.setupNotifications(FrequencyStatus.DAILY);
+  }
+
+  private async setupNotifications(when: FrequencyStatus) {
+    const data =
+      await this.userCityFrequenciesService.getNotificationData(when);
     // Get all city
     const cityNames = [...new Set(data.map((entry) => entry.city.name))];
 
@@ -53,8 +64,17 @@ export class WeatherNotifierService {
       userWeatherMap[email].push(weather);
     }
 
-    for (const [email, weather] of Object.entries(userWeatherMap)) {
-      await this.notificationService.sendNotificationMail(email, weather);
-    }
+    await Promise.all(
+      Object.entries(userWeatherMap).map(async ([email, weather]) => {
+        try {
+          await this.notificationService.sendNotificationMail(email, weather);
+        } catch (error) {
+          this.logger.error(
+            `Fail send ${when} weather notification ${email}`,
+            error,
+          );
+        }
+      }),
+    );
   }
 }
