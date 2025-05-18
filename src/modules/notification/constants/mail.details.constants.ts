@@ -10,8 +10,8 @@ export const MAIL_DETAILS: Record<TYPE_MAIL, MailInfo> = {
     subject: 'Subscribe notification for city: ',
     text: 'Token: ',
   },
-  [TYPE_MAIL.UNSUBSCRIBE]: {
-    subject: 'Unsubscribe notification for city: ',
-    text: 'Token: ',
+  [TYPE_MAIL.WEATHER_NOTIFICATION]: {
+    subject: 'Notification about selected cities',
+    text: null,
   },
 };

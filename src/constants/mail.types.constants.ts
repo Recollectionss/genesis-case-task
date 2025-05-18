@@ -1,6 +1,6 @@
 export enum TYPE_MAIL {
   SUBSCRIBE = 'subscribe',
-  UNSUBSCRIBE = 'unsubscribe',
+  WEATHER_NOTIFICATION = 'weather_notification',
 }
 
 export interface ISendMail {
