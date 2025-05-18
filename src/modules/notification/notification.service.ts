@@ -4,12 +4,11 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import smtpConfig from '../../config/smtp.config';
-import { ConfigType } from '@nestjs/config';
 import { Transporter } from 'nodemailer';
 import { ISendMail } from '../../constants/mail.types.constants';
-import { MAIL_DETAILS } from './constants/mail.details.constants';
 import { MAIL_TRANSPORTER } from './mail-transporter.providers';
+import { MailBuilderService } from './mail-builder/mail-builder.service';
+import { Mail } from './types/mail.type';
 
 @Injectable()
 export class NotificationService {
@@ -17,13 +16,12 @@ export class NotificationService {
 
   constructor(
     @Inject(MAIL_TRANSPORTER) private readonly transporter: Transporter,
-    @Inject(smtpConfig.KEY)
-    private readonly smtpConf: ConfigType<typeof smtpConfig>,
+    private readonly mailBuilderService: MailBuilderService,
   ) {}
 
-  async sendMail(data: ISendMail) {
+  async sendSubscribeMail(data: ISendMail): Promise<void> {
     try {
-      const mailData = this.buildMail(data);
+      const mailData: Mail = this.buildSubscribeMail(data);
       await this.transporter.sendMail(mailData);
       return;
     } catch (err) {
@@ -32,12 +30,10 @@ export class NotificationService {
     }
   }
 
-  private buildMail(data: ISendMail) {
-    return {
-      from: this.smtpConf.user,
-      to: data.to,
-      subject: MAIL_DETAILS[data.type].subject + data.city,
-      text: MAIL_DETAILS[data.type].text + data.token,
-    };
+  private buildSubscribeMail(data: ISendMail): Mail {
+    return this.mailBuilderService
+      .to(data.to)
+      .mailSubscribe(data.city, data.token)
+      .build();
   }
 }
