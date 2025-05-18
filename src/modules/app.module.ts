@@ -8,6 +8,7 @@ import { WeatherModule } from './weather/weather.module';
 import { UserCityFrequenciesModule } from './user-city-frequencies/user-city-frequencies.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { WeatherNotifierModule } from './weather-notifier/weather-notifier.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { WeatherNotifierModule } from './weather-notifier/weather-notifier.modul
     UserCityFrequenciesModule,
     SubscriptionModule,
     WeatherNotifierModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [],
   providers: [],
