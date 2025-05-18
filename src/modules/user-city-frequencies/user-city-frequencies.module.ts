@@ -9,5 +9,6 @@ import { PostgresModule } from '../postgres/postgres.module';
 @Module({
   imports: [PostgresModule, UserModule, CityModule, FrequencyModule],
   providers: [UserCityFrequenciesService, ...UserCityFrequencyProvider],
+  exports: [UserCityFrequenciesService],
 })
 export class UserCityFrequenciesModule {}
