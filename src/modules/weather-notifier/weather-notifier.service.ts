@@ -15,11 +15,13 @@ export class WeatherNotifierService {
     private readonly userCityFrequenciesService: UserCityFrequenciesService,
   ) {}
 
+  // Every day from 8 AM to 8PM
   @Cron('0 8-20 * * *')
   private async hourlyNotifications() {
     await this.setupNotifications(FrequencyStatus.HOURLY);
   }
 
+  // Every day in 8 AM
   @Cron('0 8 * * *')
   private async dailyNotifications() {
     await this.setupNotifications(FrequencyStatus.DAILY);
@@ -56,6 +58,7 @@ export class WeatherNotifierService {
       const email = entry.user.email;
       const cityName = entry.city.name;
       const weather = cityWeatherMap[cityName];
+      weather.token = entry.confirmationToken;
 
       if (!userWeatherMap[email]) {
         userWeatherMap[email] = [];
