@@ -1,5 +1,5 @@
-import { FrequencyStatus } from '../constants/constants';
 import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { FrequencyStatus } from '../constants/frequency-status.constants';
 
 export class SubscribeDto {
   @IsNotEmpty()
