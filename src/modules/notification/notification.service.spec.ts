@@ -8,6 +8,8 @@ import {
 } from '../../shared/constants/mail.types.constants';
 import { MAIL_DETAILS } from './constants/mail.details.constants';
 import { InternalServerErrorException } from '@nestjs/common';
+import { CityWeatherDto } from '../../shared/dto/city-weather.dto';
+import { MailBuilderService } from './mail-builder/mail-builder.service';
 
 describe('NotificationService', () => {
   let service: NotificationService;
@@ -25,6 +27,7 @@ describe('NotificationService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         NotificationService,
+        MailBuilderService,
         {
           provide: MAIL_TRANSPORTER,
           useValue: mockTransporter,
@@ -51,36 +54,58 @@ describe('NotificationService', () => {
     type: TYPE_MAIL.SUBSCRIBE,
   };
 
-  it.each([[TYPE_MAIL.SUBSCRIBE], [TYPE_MAIL.UNSUBSCRIBE]])(
-    `should send mail type ${baseMailDto.type}`,
-    async (type) => {
-      sendMailMock.mockResolvedValue(true);
-      const result = await service.sendMail({ ...baseMailDto, type });
+  it(`should send  subscribe mail type `, async () => {
+    sendMailMock.mockResolvedValue(true);
+    const result = await service.sendSubscribeMail(baseMailDto);
 
-      expect(result).toBe(undefined);
-      expect(sendMailMock).toHaveBeenCalledWith(
-        expect.objectContaining({
-          from: mockSmtpConfig.user,
-          to: baseMailDto.to,
-          subject: MAIL_DETAILS[type].subject + baseMailDto.city,
-          text: MAIL_DETAILS[type].text + baseMailDto.token,
-        }),
-      );
+    expect(result).toBe(undefined);
+    expect(sendMailMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        from: mockSmtpConfig.user,
+        to: baseMailDto.to,
+        subject: MAIL_DETAILS[TYPE_MAIL.SUBSCRIBE].subject + baseMailDto.city,
+        text: MAIL_DETAILS[TYPE_MAIL.SUBSCRIBE].text + baseMailDto.token,
+      }),
+    );
+  });
+
+  const weatherNotificationMail: CityWeatherDto[] = [
+    {
+      city: 'Kyiv',
+      token: 'confirmationToken',
+      temperature: 10,
+      humidity: 10,
+      description: 'description',
     },
-  );
+  ];
 
-  it('should throw on invalid mail type', async () => {
-    await expect(
-      service.sendMail({ ...baseMailDto, type: 'invalid' as any }),
-    ).rejects.toThrow(/Cannot read properties of undefined/);
+  it(`should send  weather notification mail type `, async () => {
+    sendMailMock.mockResolvedValue(true);
+    const result = await service.sendNotificationMail(
+      'test@example.com',
+      weatherNotificationMail,
+    );
+    const weather = weatherNotificationMail[0];
 
-    expect(sendMailMock).not.toHaveBeenCalled();
+    expect(result).toBe(undefined);
+    expect(sendMailMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        from: mockSmtpConfig.user,
+        to: baseMailDto.to,
+        subject: MAIL_DETAILS.weather_notification.subject,
+        text: `City: ${weather.city}
+Temperature: ${weather.temperature}
+Humidity: ${weather.humidity}
+Description: ${weather.description}
+Unsubscribe: http://localhost:5010/unsubscribe/${weather.token}`,
+      }),
+    );
   });
 
   it('should throw InternalServerErrorException if transporter fails', async () => {
     sendMailMock.mockRejectedValue(new Error('SMTP error'));
 
-    await expect(service.sendMail(baseMailDto)).rejects.toThrow(
+    await expect(service.sendSubscribeMail(baseMailDto)).rejects.toThrow(
       InternalServerErrorException,
     );
 

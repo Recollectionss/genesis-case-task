@@ -35,12 +35,7 @@ describe('UrlBuilderService', () => {
 
   it('success generate url', () => {
     const result = `${WEATHER_API_BASE_URL}${WEATHER_API_PATHS.CURRENT}${WEATHER_API_TYPE_RESPONSE.JSON}?lang=en&q=${mockParams.city}&key=${mockWeatherApiConfig.key}`;
-    const dataUrl = service
-      .base()
-      .current()
-      .json()
-      .withParams(mockParams)
-      .build();
+    const dataUrl = service.current().json().withParams(mockParams).build();
     expect(dataUrl).toEqual(result);
   });
 });
