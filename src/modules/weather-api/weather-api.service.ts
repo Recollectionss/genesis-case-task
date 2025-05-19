@@ -19,6 +19,9 @@ export class WeatherApiService {
   async getCurrentWeather(
     data: GetCurrentWeatherDto,
   ): Promise<CurrentWeatherDto> {
+    if (data.city === '') {
+      throw new BadRequestException();
+    }
     try {
       const url = this.getCurrentWeatherJsonUrl(data);
       const resultData = await this.fetch(url);

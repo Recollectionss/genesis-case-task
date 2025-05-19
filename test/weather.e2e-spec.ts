@@ -29,6 +29,10 @@ describe('WeatherController (e2e)', () => {
       .expect(400);
   });
 
+  it('/weather (GET) fail - city not provided', () => {
+    return request(app.getHttpServer()).get('/weather').expect(400);
+  });
+
   it('/weather (GET) fail - city not sting', () => {
     return request(app.getHttpServer())
       .get('/weather')
