@@ -9,7 +9,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { SubscriptionService } from './subscription.service';
-import { SubscribeDto } from '../dto/subscribe.dto';
+import { SubscribeDto } from '../../shared/dto/subscribe.dto';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { TokenSubscribeDto } from './dto/token-subscribe.dto';
 

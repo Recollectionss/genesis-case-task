@@ -2,9 +2,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { NotificationService } from '../notification/notification.service';
 import { WeatherApiService } from '../weather-api/weather-api.service';
 import { UserCityFrequenciesService } from '../user-city-frequencies/user-city-frequencies.service';
-import { CityWeatherDto } from '../weather-api/dto/city-weather.dto';
-import { FrequencyStatus } from '../constants/constants';
+import { CityWeatherDto } from '../../shared/dto/city-weather.dto';
 import { Cron } from '@nestjs/schedule';
+import { FrequencyStatus } from '../../shared/constants/frequency-status.constants';
 
 @Injectable()
 export class WeatherNotifierService {

@@ -10,13 +10,13 @@ import { CityService } from './city/city.service';
 import { UserService } from './user/user.service';
 import { FrequencyService } from './frequency/frequency.service';
 import { RelationsIdType } from './types/relations-id.type';
-import { SubscribeDto } from '../dto/subscribe.dto';
+import { SubscribeDto } from '../../shared/dto/subscribe.dto';
 import Transaction from 'sequelize/types/transaction';
 import { v4 as uuidv4 } from 'uuid';
 import { Frequency } from './frequency/entity/frequency.entity';
-import { FrequencyStatus } from '../constants/constants';
 import { User } from './user/entity/user.entity';
 import { City } from './city/entity/city.entity';
+import { FrequencyStatus } from '../../shared/constants/frequency-status.constants';
 
 @Injectable()
 export class UserCityFrequenciesService {
@@ -55,7 +55,6 @@ export class UserCityFrequenciesService {
     if (result < 1) {
       throw new NotFoundException('Subscribe already confirmed');
     }
-    return;
   }
 
   async confirmUnsubscribe(token: string): Promise<void> {
@@ -63,7 +62,6 @@ export class UserCityFrequenciesService {
       { isDeleted: true, isConfirmed: false },
       { where: { confirmationToken: token } },
     );
-    return;
   }
 
   async getNotificationData(when: FrequencyStatus) {
@@ -95,9 +93,13 @@ export class UserCityFrequenciesService {
   }
 
   private async findRelationsId(data: SubscribeDto): Promise<RelationsIdType> {
-    const userId = await this.userService.findOrCreate({ email: data.email });
-    const cityId = await this.cityService.findOrCreate({ name: data.city });
-    const frequencyId = await this.frequencyService.findOrCreate({
+    const userId: string = await this.userService.findOrCreate({
+      email: data.email,
+    });
+    const cityId: string = await this.cityService.findOrCreate({
+      name: data.city,
+    });
+    const frequencyId: string = await this.frequencyService.findOrCreate({
       when: data.when,
     });
     return { userId, cityId, frequencyId };

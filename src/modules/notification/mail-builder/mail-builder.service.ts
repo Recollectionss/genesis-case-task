@@ -3,7 +3,7 @@ import smtpConfig from '../../../config/smtp.config';
 import { ConfigType } from '@nestjs/config';
 import { Mail } from '../types/mail.type';
 import { MAIL_DETAILS } from '../constants/mail.details.constants';
-import { CityWeatherDto } from '../../weather-api/dto/city-weather.dto';
+import { CityWeatherDto } from '../../../shared/dto/city-weather.dto';
 
 @Injectable()
 export class MailBuilderService {

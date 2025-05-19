@@ -1,4 +1,4 @@
-import { TYPE_MAIL } from '../../../constants/mail.types.constants';
+import { TYPE_MAIL } from '../../../shared/constants/mail.types.constants';
 
 type MailInfo = {
   subject: string;

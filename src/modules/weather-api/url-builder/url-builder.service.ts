@@ -20,7 +20,6 @@ import { GetCurrentWeatherDto } from '../dto/get-current-weather.dto';
   }
 
   this
-  .base()
   .current()
   .json()
   .withParams(data) (base lang English see WEATHER_API_PARAMS)
@@ -36,11 +35,8 @@ export class UrlBuilderService {
   constructor(
     @Inject(weatherApiConfig.KEY)
     private readonly weatherApiConf: ConfigType<typeof weatherApiConfig>,
-  ) {}
-
-  base(): UrlBuilderService {
-    this.url = WEATHER_API_BASE_URL;
-    return this;
+  ) {
+    this.base();
   }
 
   current(): UrlBuilderService {
@@ -65,7 +61,7 @@ export class UrlBuilderService {
 
   build(): string {
     const finalUrl = this.url;
-    this.url = '';
+    this.base();
     this.validateUrl(finalUrl);
     return finalUrl;
   }
@@ -87,5 +83,10 @@ export class UrlBuilderService {
         throw new Error(`Missing required query param: ${key}`);
       }
     }
+  }
+
+  private base(): UrlBuilderService {
+    this.url = WEATHER_API_BASE_URL;
+    return this;
   }
 }

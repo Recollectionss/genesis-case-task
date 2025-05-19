@@ -2,7 +2,7 @@ import postgresConfig from '../../config/postgres.config';
 import appConfig from '../../config/app.config';
 import { ConfigType } from '@nestjs/config';
 import { POSTGRES, SEQUELIZE } from './constants';
-import { ENV, NODE_ENV } from '../../constants/env.constant';
+import { ENV, NODE_ENV } from '../../shared/constants/env.constant';
 import { Sequelize } from 'sequelize-typescript';
 import { City } from '../user-city-frequencies/city/entity/city.entity';
 import { User } from '../user-city-frequencies/user/entity/user.entity';

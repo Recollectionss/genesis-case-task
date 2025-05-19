@@ -5,11 +5,11 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Transporter } from 'nodemailer';
-import { ISendMail } from '../../constants/mail.types.constants';
+import { ISendMail } from '../../shared/constants/mail.types.constants';
 import { MAIL_TRANSPORTER } from './mail-transporter.providers';
 import { MailBuilderService } from './mail-builder/mail-builder.service';
 import { Mail } from './types/mail.type';
-import { CityWeatherDto } from '../weather-api/dto/city-weather.dto';
+import { CityWeatherDto } from '../../shared/dto/city-weather.dto';
 
 @Injectable()
 export class NotificationService {

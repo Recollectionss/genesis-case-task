@@ -2,7 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationService } from './notification.service';
 import { MAIL_TRANSPORTER } from './mail-transporter.providers';
 import smtpConfig from '../../config/smtp.config';
-import { ISendMail, TYPE_MAIL } from '../../constants/mail.types.constants';
+import {
+  ISendMail,
+  TYPE_MAIL,
+} from '../../shared/constants/mail.types.constants';
 import { MAIL_DETAILS } from './constants/mail.details.constants';
 import { InternalServerErrorException } from '@nestjs/common';
 
