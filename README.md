@@ -86,4 +86,38 @@ $ npm run test:e2e
 - **UserCityFrequencies** – main module for working with DB; includes submodules for managing `User`, `City`, and `Frequency` entities.
 - **Subscription** -  handles API request for `subscribe`, `confirm`, `unsubscribe`
 
+## Database structure
+
+ - City
+
+ | Field  | Type      | Description            |
+ |--------|-----------|------------------------|
+ | `id`   | UUID (PK) | Unique city identifier |
+ | `name` | STRING    | Name of the city       |
+
+ - Frequency
+
+| Field  | Type      | Description                                               |
+|--------|-----------|-----------------------------------------------------------|
+| `id`   | UUID (PK) | Unique identifier                                         |
+| `when` | ENUM      | Value from the `FrequencyStatus` enum (`daily`, `hourly`) |
+
+ - User
+
+| Field   | Type      | Description            |
+|---------|-----------|------------------------|
+| `id`    | UUID (PK) | Unique user identifier |
+| `email` | STRING    | User's email address   |
+
+ - UserCityFrequencies
+
+| Field               | Type      | Description                                     |
+|---------------------|-----------|-------------------------------------------------|
+| `id`                | UUID (PK) | Unique record identifier                        |
+| `cityId`            | UUID (FK) | Reference to `city.id`                          |
+| `frequencyId`       | UUID (FK) | Reference to `frequency.id`                     |
+| `userId`            | UUID (FK) | Reference to `user.id`                          |
+| `isDeleted`         | BOOLEAN   | Marks whether the subscription is deleted       |
+| `isConfirmed`       | BOOLEAN   | Indicates whether the subscription is confirmed |
+| `confirmationToken` | UUID      | Confirmation token                              |
 
